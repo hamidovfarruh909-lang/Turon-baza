@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abonentlar Bazasi</title>
+    <title>Turon Telecom - Abonentlar Bazasi</title>
     <style>
         :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --bg-color: #f3f4f6;
+            --primary-color: #0284c7;
+            --primary-hover: #0369a1;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-color: #1f2937;
-            --border-color: #e5e7eb;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
         }
 
         body {
@@ -19,82 +19,82 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
+            padding-bottom: 80px;
         }
 
         h1 {
             text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 30px;
+            color: #0284c7;
+            margin-bottom: 5px;
+            font-size: 1.8rem;
         }
 
-        .card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        h2 {
-            margin-top: 0;
-            font-size: 1.25rem;
-            color: #374151;
-            border-bottom: 2px solid var(--bg-color);
-            padding-bottom: 10px;
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.95rem;
             margin-bottom: 20px;
         }
 
-        .form-group {
+        /* Yuqori menyu tugmalari */
+        .tabs {
+            display: flex;
+            gap: 8px;
             margin-bottom: 15px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 5px;
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #e2e8f0;
+            color: #475569;
             font-weight: 600;
             font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
         }
 
-        input {
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Qidiruv paneli */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 15px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.2s;
+            background: #fff;
         }
 
-        input:focus {
+        .search-box input:focus {
             border-color: var(--primary-color);
         }
 
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .table-responsive {
-            overflow-x: auto;
+        /* Jadval yoki ro'yxat ko'rinishi */
+        .card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
         }
 
         table {
@@ -104,38 +104,128 @@
         }
 
         th, td {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.9rem;
         }
 
         th {
-            background-color: #f9fafb;
-            font-weight: 600;
-            color: #4b5563;
-        }
-
-        tr:hover {
-            background-color: #f9fafb;
+            color: #475569;
+            background-color: #f8fafc;
         }
 
         .delete-btn {
             background-color: #ef4444;
             color: white;
             border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
+            padding: 5px 10px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* Pastdagi suzuvchi "+" tugmasi */
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 55px;
+            height: 55px;
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .fab:hover {
+            background-color: #16a34a;
+        }
+
+        /* Modal oyna (Ma'lumot qo'shish uchun) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: var(--text-color);
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
             font-size: 0.85rem;
-            width: auto;
         }
 
-        .delete-btn:hover {
-            background-color: #dc2626;
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
         }
 
-        .empty-message {
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .cancel-btn {
+            background-color: #e2e8f0;
+            color: #475569;
+        }
+
+        .empty-text {
             text-align: center;
-            color: #6b7280;
+            color: #94a3b8;
             padding: 20px;
         }
     </style>
@@ -143,128 +233,149 @@
 <body>
 
     <div class="container">
-        <h1>Abonentlar Bazasini Boshqarish Tizimi</h1>
+        <h1>Turon Telecom</h1>
+        <div class="subtitle">Yunusobod tumani abonentlari bazasi</div>
 
-        <!-- 1-Bo'lim: Ma'lumot kiritish -->
-        <div class="card">
-            <h2>Yangi abonent qo'shish</h2>
-            <form id="subscriberForm">
-                <div class="form-group">
-                    <label for="name">Abonent ismi:</label>
-                    <input type="text" id="name" placeholder="Masalan: Alisher Valiyev" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Telefon raqami:</label>
-                    <input type="tel" id="phone" placeholder="Masalan: +998 90 123 45 67" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">Manzili:</label>
-                    <input type="text" id="address" placeholder="Masalan: Toshkent sh, Chilonzor tumani" required>
-                </div>
-                <button type="submit">Abonentni qo'shish</button>
-            </form>
+        <!-- Yuqori menyu tugmalari -->
+        <div class="tabs">
+            <button class="tab-btn active" id="tabAll">Umumiy baza</button>
+            <button class="tab-btn" id="tabNew">Yangi abonentlar (<span id="newCount">0</span>)</button>
         </div>
 
-        <!-- 2-Bo'lim: Abonentlar jadvali -->
+        <!-- Qidiruv paneli -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Ism, manzil yoki telefon raqami bo'yicha qidirish...">
+        </div>
+
+        <!-- Abonentlar jadvali -->
         <div class="card">
-            <h2>Abonentlar ro'yxati</h2>
-            <div class="table-responsive">
+            <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Ismi</th>
-                            <th>Telefon raqami</th>
+                            <th>Telefon</th>
                             <th>Manzili</th>
-                            <th>Amallar</th>
+                            <th>Amal</th>
                         </tr>
                     </thead>
-                    <tbody id="subscriberTableBody">
-                        <!-- JavaScript orqali ma'lumotlar shu yerga qo'shiladi -->
+                    <tbody id="tableBody">
+                        <!-- Ma'lumotlar shu yerga chiqadi -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+    <!-- Pastdagi qo'shish tugmasi (+) -->
+    <button class="fab" id="openModalBtn">+</button>
+
+    <!-- Ma'lumot qo'shish Oyna (Modal) -->
+    <div class="modal" id="subscriberModal">
+        <div class="modal-content">
+            <h3>Yangi abonent qo'shish</h3>
+            <form id="subscriberForm">
+                <div class="form-group">
+                    <label>Abonent ismi:</label>
+                    <input type="text" id="name" placeholder="Masalan: Anvar Karimov" required>
+                </div>
+                <div class="form-group">
+                    <label>Telefon raqami:</label>
+                    <input type="tel" id="phone" placeholder="+998 90 123 45 67" required>
+                </div>
+                <div class="form-group">
+                    <label>Manzili:</label>
+                    <input type="text" id="address" placeholder="Yunusobod, 4-mavze" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" class="cancel-btn" id="closeModalBtn">Bekor qilish</button>
+                    <button type="submit" class="save-btn">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Domen elementlarini olish
+        const modal = document.getElementById('subscriberModal');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
         const form = document.getElementById('subscriberForm');
-        const nameInput = document.getElementById('name');
-        const phoneInput = document.getElementById('phone');
-        const addressInput = document.getElementById('address');
-        const tableBody = document.getElementById('subscriberTableBody');
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const newCountSpan = document.getElementById('newCount');
 
-        // Ma'lumotlarni LocalStorage dan olish yoki bo'sh massiv yaratish
-        let subscribers = JSON.parse(localStorage.getItem('subscribers')) || [];
+        let subscribers = JSON.parse(localStorage.getItem('turon_subscribers')) || [];
 
-        // Jadvalni yangilovchi funksiya
-        function renderTable() {
+        // Modalni ochish va yopish
+        openModalBtn.addEventListener('click', () => { modal.style.display = 'flex'; });
+        closeModalBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+        // Ma'lumotlarni chiqarish
+        function render(filter = '') {
             tableBody.innerHTML = '';
+            
+            let filtered = subscribers.filter(sub => 
+                sub.name.toLowerCase().includes(filter.toLowerCase()) ||
+                sub.phone.toLowerCase().includes(filter.toLowerCase()) ||
+                sub.address.toLowerCase().includes(filter.toLowerCase())
+            );
 
-            if (subscribers.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="empty-message">Hozircha abonentlar mavjud emas.</td></tr>`;
+            if (filtered.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="5" class="empty-text">Baza bo'sh yoki ma'lumot topilmadi</td></tr>`;
+                newCountSpan.textContent = subscribers.length;
                 return;
             }
 
-            subscribers.forEach((sub, index) => {
-                const row = document.createElement('tr');
+            filtered.forEach((sub, index) => {
+                let row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${escapeHtml(sub.name)}</td>
-                    <td>${escapeHtml(sub.phone)}</td>
-                    <td>${escapeHtml(sub.address)}</td>
-                    <td><button class="delete-btn" onclick="deleteSubscriber(${index})">O'chirish</button></td>
+                    <td>${sub.name}</td>
+                    <td>${sub.phone}</td>
+                    <td>${sub.address}</td>
+                    <td><button class="delete-btn" onclick="deleteSub(${index})">O'chirish</button></td>
                 `;
                 tableBody.appendChild(row);
             });
+            
+            newCountSpan.textContent = subscribers.length;
         }
 
-        // Forma yuborilganda ishlaydigan hodisa
-        form.addEventListener('submit', function (e) {
+        // Yangi abonent qo'shish
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
-
-            const newSubscriber = {
-                name: nameInput.value.trim(),
-                phone: phoneInput.value.trim(),
-                address: addressInput.value.trim()
+            const newSub = {
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                address: document.getElementById('address').value.trim()
             };
 
-            subscribers.push(newSubscriber);
-            saveAndRender();
-
-            // Formalarni tozalash
+            subscribers.push(newSub);
+            localStorage.setItem('turon_subscribers', JSON.stringify(subscribers));
+            
             form.reset();
+            modal.style.display = 'none';
+            render();
         });
 
-        // Abonentni o'chirish funksiyasi
-        function deleteSubscriber(index) {
-            if (confirm("Haqiqatan ham bu abonentni o'chirmoqchimisiz?")) {
+        // O'chirish
+        window.deleteSub = function(index) {
+            if(confirm("Haqiqatan ham o'chirmoqchimisiz?")) {
                 subscribers.splice(index, 1);
-                saveAndRender();
+                localStorage.setItem('turon_subscribers', JSON.stringify(subscribers));
+                render(searchInput.value);
             }
         }
 
-        // Saqlash va yangilash
-        function saveAndRender() {
-            localStorage.setItem('subscribers', JSON.stringify(subscribers));
-            renderTable();
-        }
+        // Qidiruv
+        searchInput.addEventListener('input', (e) => {
+            render(e.target.value);
+        });
 
-        // Xavfsizlik uchun HTML belgilarini tozalash
-        function escapeHtml(text) {
-            const map = {
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                '"': '&quot;',
-                "'": '&#039;'
-            };
-            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-        }
-
-        // Sahifa yuklanganda jadvalni chiqarish
-        renderTable();
+        // Sahifa ochilganda ishga tushirish
+        render();
     </script>
 </body>
 </html>
