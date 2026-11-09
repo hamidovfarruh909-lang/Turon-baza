@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turon Telecom - Yunusobod Abonentlari</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary: #0056b3;
@@ -71,6 +70,7 @@
         
         .load-more { display: block; width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 20px 0; text-align: center; }
         
+        /* Telegram uslubidagi dumaloq qo'shish tugmasi */
         .fab-btn { position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; background: var(--success); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); cursor: pointer; z-index: 1000; border: none; transition: transform 0.2s; }
         .fab-btn:hover { transform: scale(1.1); background: var(--success-dark); }
 
@@ -99,12 +99,14 @@
             <p class="subtitle">Yunusobod tumani abonentlari bazasi</p>
         </header>
 
+        <!-- Navigatsiya menyusi -->
         <div class="nav-tabs">
             <button class="tab-btn active" onclick="switchTab('main')">📋 Umumiy baza</button>
             <button class="tab-btn" onclick="switchTab('newSubs')">🆕 Yangi abonentlar (<span id="newCountBadge">0</span>)</button>
             <button class="tab-btn" onclick="switchTab('settings')">⚙️ Arxiv</button>
         </div>
 
+        <!-- 1. UMUMIY BAZA -->
         <div id="mainTab" class="tab-content active">
             <input type="text" id="searchInput" class="search-box" placeholder="Ism, login, manzil yoki telefon raqami bo'yicha qidirish..." oninput="filterSubscribers()">
             <div id="stats" class="stats">Baza yuklanmoqda...</div>
@@ -112,11 +114,13 @@
             <button id="loadMoreBtn" class="load-more" onclick="loadMore()" style="display: none;">Ko'proq yuklash (+50)</button>
         </div>
 
+        <!-- 2. YANGI ABONENTLAR JADVALI (5 kunlik) -->
         <div id="newSubsTab" class="tab-content">
             <div class="stats" style="margin-bottom: 15px;">5 kun ichida umumiy bazaga o'tuvchi yangi abonentlar jadvali:</div>
             <div id="newSubscribersList"></div>
         </div>
 
+        <!-- 3. ARXIV BO'LIMI -->
         <div id="settingsTab" class="tab-content">
             <div class="card" style="border-left-color: var(--danger);">
                 <div class="name" style="color: var(--danger-dark);">🗑 O'chirilgan abonentlar arxivi</div>
@@ -125,8 +129,10 @@
         </div>
     </div>
 
+    <!-- Telegram uslubidagi dumaloq qo'shish tugmasi -->
     <button class="fab-btn" onclick="openAddModal()" title="Yangi abonent qo'shish">+</button>
 
+    <!-- Yangi abonent qo'shish Modal oynasi -->
     <div id="addModal" class="modal">
         <div class="modal-content">
             <div class="modal-title">➕ Yangi abonent qo'shish</div>
@@ -145,6 +151,7 @@
         </div>
     </div>
 
+    <!-- O'chirish sababini so'rovchi Modal oyna -->
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <div class="modal-title" style="color: var(--danger-dark);">Abonentni o'chirish sababini tanlang:</div>
@@ -159,6 +166,11 @@
     <div id="toast" class="toast">Amaliyot bajarildi!</div>
 
     <script>
+        // Boshlang'ich namuna baza (agar xotira bo'sh bo'lsa)
+        let defaultSubscribers = [
+            { "Имя": "Farruh Hamidov", "Логин": "turon_909", "Адрес": "Yunusobod, 13-mavze, 24-dom, 12-kv", "Тариф": "100,000 so'm", "Баланс": "15,000", "Телефон": "+998901234567" }
+        ];
+
         let subscribers = [];
         let newSubscribers = [];
         let deletedSubscribers = [];
@@ -167,38 +179,27 @@
         let pendingDeleteId = null;
         let pendingDeleteType = null;
 
-        async function loadData() {
+        function initApp() {
             try {
                 let localSubs = localStorage.getItem('turon_subscribers_list');
                 let localNew = localStorage.getItem('turon_new_subscribers');
                 let localDeleted = localStorage.getItem('turon_deleted_subscribers');
                 
-                if (localNew) newSubscribers = JSON.parse(localNew);
-                if (localDeleted) deletedSubscribers = JSON.parse(localDeleted);
-                checkNewSubscribersDays();
-
                 if (localSubs) {
                     subscribers = JSON.parse(localSubs);
-                    filteredSubscribers = [...subscribers];
-                    renderAll();
                 } else {
-                    const response = await fetch('YUNUSOBOD_BARRALIK_YAGONA_TARTIBLANGAN (1).xlsx');
-                    const arrayBuffer = await response.arrayBuffer();
-                    const data = new Uint8Array(arrayBuffer);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                    
-                    subscribers = XLSX.utils.sheet_to_json(worksheet);
+                    subscribers = defaultSubscribers;
                     localStorage.setItem('turon_subscribers_list', JSON.stringify(subscribers));
-                    filteredSubscribers = [...subscribers];
-                    renderAll();
                 }
+
+                if (localNew) newSubscribers = JSON.parse(localNew);
+                if (localDeleted) deletedSubscribers = JSON.parse(localDeleted);
+
+                checkNewSubscribersDays();
+                filteredSubscribers = [...subscribers];
+                renderAll();
             } catch (error) {
                 console.error(error);
-                document.getElementById('stats').innerText = "Excel fayl topilmadi yoki yuklashda xatolik. O'ng pastdagi '+' tugmasi orqali yangi abonent qo'shishingiz mumkin.";
-                subscribers = [];
-                filteredSubscribers = [];
-                renderAll();
             }
         }
 
@@ -287,6 +288,7 @@
             renderAll();
             closeAddModal();
 
+            // Maydonlarni tozalash
             document.getElementById('newDistrict').value = '';
             document.getElementById('newQuarter').value = '';
             document.getElementById('newBuilding').value = '';
@@ -354,4 +356,10 @@
             renderSubscribers();
             renderNewSubscribers();
             renderDeletedSubscribers();
-            document.getElementById('newCountBadge').innerText = newSubscribe
+            document.getElementById('newCountBadge').innerText = newSubscribers.length;
+        }
+
+        function renderSubscribers() {
+            const listEl = document.getElementById('subscribersList');
+            const statsEl = document.getElementById('stats');
+         
