@@ -166,11 +166,6 @@
     <div id="toast" class="toast">Amaliyot bajarildi!</div>
 
     <script>
-        // Boshlang'ich namuna baza (agar xotira bo'sh bo'lsa)
-        let defaultSubscribers = [
-            { "Имя": "Farruh Hamidov", "Логин": "turon_909", "Адрес": "Yunusobod, 13-mavze, 24-dom, 12-kv", "Тариф": "100,000 so'm", "Баланс": "15,000", "Телефон": "+998901234567" }
-        ];
-
         let subscribers = [];
         let newSubscribers = [];
         let deletedSubscribers = [];
@@ -188,7 +183,9 @@
                 if (localSubs) {
                     subscribers = JSON.parse(localSubs);
                 } else {
-                    subscribers = defaultSubscribers;
+                    subscribers = [
+                        { "Имя": "Farruh Hamidov", "Логин": "turon_909", "Адрес": "Yunusobod, 13-mavze, 24-dom, 12-kv", "Тариф": "100,000 so'm", "Баланс": "15,000", "Телефон": "+998901234567" }
+                    ];
                     localStorage.setItem('turon_subscribers_list', JSON.stringify(subscribers));
                 }
 
@@ -362,4 +359,6 @@
         function renderSubscribers() {
             const listEl = document.getElementById('subscribersList');
             const statsEl = document.getElementById('stats');
-         
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            
+            if (s
